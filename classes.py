@@ -10,38 +10,43 @@ from constantes import *
 import random 
 
 class Perso:
-	""" This is the class used for both MacGyver and the BadGuy sprites"""
+	""" This is the class used for MacGyver sprite"""
 	def __init__(self, Image, level):
 		self.Image = pygame.image.load(MacGyver).convert_alpha()
 		"""self.Position = perso.get_rect()"""
 		self.case_x = 0
-		self.case_y = 0
+		self.case_y = 1 #Starting from 1 instead of 0 so the character effectively move down the first time DOWN_KEY is pressed.
 		self.x = 0
-		self.y = 0
+		self.y = 30 #Initial position of character is set bellow the upper black margin.
 		self.level = level
 
 	#Keyboard touch used to moove MacGyver:
 	def mooving(self, direction):
 		if direction == 'right':
-			if self.case_x < (nombre_sprite_cote - 1):
-				if self.level.structure[self.case_y][self.case_x+1] != 'm':
+			if self.case_x < (nombre_sprite_cote - 1): #Character can't go off screen
+				if self.level.structure[self.case_y][self.case_x+1] != 'm': #He can't pass trough walls etheir ! (he's MacGyver, not a ghost)
 					self.case_x += 1
 					self.x = self.case_x * taille_sprite
+					print(self.x, self.y)
+
 
 		if direction == 'left':
 			if self.case_x > 0:
 				if self.level.structure[self.case_y][self.case_x-1] != 'm':
 					self.case_x -= 1
 					self.x = self.case_x * taille_sprite
+					print(self.x, self.y)
 
 		if direction == 'up':
 			if self.case_y > 0:
 				if self.level.structure[self.case_y-1][self.case_x] !='m': 
-					self.case_y -= 1
-					self.y = self.case_y * taille_sprite
+					if self.level.structure[self.case_y-1][self.case_x] !='c': 
+						self.case_y -= 1
+						self.y = self.case_y * taille_sprite
+						print(self.x, self.y)
 
 		if direction == 'down':
-			if self.case_y < (nombre_sprite_cote - 1):
+			if self.case_y < (nombre_sprite_cote ):
 				if self.level.structure[self.case_y+1][self.case_x] !='m':
 					self.case_y += 1
 					self.y = self.case_y * taille_sprite
@@ -79,6 +84,7 @@ class Level:
 	def display(self, fenetre):
 		wall = pygame.image.load('images/mur.png').convert()
 		gardien = pygame.image.load(Gardien).convert_alpha()
+		CarreNoir = pygame.image.load(Carre_Noir).convert_alpha()
 
 		num_line = 0
 		for line in self.structure:
@@ -90,6 +96,8 @@ class Level:
 					fenetre.blit(wall, (x,y))
 				elif sprite == 'a':
 					fenetre.blit(gardien, (x,y))
+				"""elif sprite == 'c':
+					fenetre.blit(CarreNoir, (x,y))"""
 				num_case += 1
 			num_line += 1
 
@@ -112,7 +120,7 @@ class loot: #the class for the items
 				self.y = self.case_y * taille_sprite
 				self.x = self.case_x * taille_sprite
 				self.loaded = False
-				print(self.x, self.y)
+				
 
 
 				"""if self.level.structure[self.case_x][self.case_y] != 'm':

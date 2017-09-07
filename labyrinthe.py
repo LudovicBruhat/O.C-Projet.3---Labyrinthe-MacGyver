@@ -1,5 +1,5 @@
 """
-Jeu Aider MacGyver à s'échapper
+ Aider MacGyver à s'échapper
 Jeu dans lequel on doit déplacer McGyver à travers un labyrinthe
  et lui faire ramasser des objets pour qu'il puisse endormir le garde à la fin 
  du niveau et sortir.
@@ -19,7 +19,7 @@ import random
 pygame.init()
 
 #Displaying the windows
-fenetre = pygame.display.set_mode((cote_fenetre, cote_fenetre))
+fenetre = pygame.display.set_mode((cote_fenetre, 480))
 #Icone
 icone = pygame.image.load(MacGyver).convert_alpha()
 pygame.display.set_icon(icone)
@@ -29,7 +29,7 @@ pygame.display.set_caption(titre_fenetre)
 
 #displaying a background for the tile of the maze
 fond = pygame.image.load(background).convert()
-fenetre.blit(fond, (0,0))
+fenetre.blit(fond, (30,30))
 
 #displaying the character .png
 perso = pygame.image.load(MacGyver).convert_alpha() #Add the png and transparency
@@ -69,6 +69,9 @@ needle.display(needleIMG, fenetre)
 ether = loot(etherIMG, level)
 ether.display(etherIMG, fenetre)
 
+syringue = 0
+
+
 #infinite loop
 while continuer:
 	
@@ -91,16 +94,32 @@ while continuer:
 
 
 	#Re-pasting after the events
-	fenetre.blit(fond, (0,0))
+	fenetre.blit(fond, (0,30))
 	level.display(fenetre)
 	fenetre.blit(Mac.Image, (Mac.x, Mac.y))
 
 	if TubeNotPicked :
 		fenetre.blit(tube.image_objet, (tube.x, tube.y))
+	if (Mac.x, Mac.y) == (tube.x, tube.y):
+		TubeNotPicked = False
+		fenetre.blit(tube.image_objet, (0, 0))
+		
+
+
 	if NeedleNotPicked :	
 		fenetre.blit(needle.image_objet, (needle.x, needle.y))
+	if (Mac.x, Mac.y) == (needle.x, needle.y):
+		NeedleNotPicked = False
+		fenetre.blit(needle.image_objet, (10, 0))
+		
+
+
 	if EtherNotPicked :
 		fenetre.blit(ether.image_objet, (ether.x, ether.y))
+	if (Mac.x, Mac.y) == (ether.x, ether.y):
+		EtherNotPicked = False
+		fenetre.blit(ether.image_objet, (30, 0))
+		
 
 	#refreshing screen
 	pygame.display.flip()
@@ -108,6 +127,9 @@ while continuer:
 
 	#EndGame Victory or loose
 	if level.structure[Mac.case_y][Mac.case_x] == 'a': #If MacGyver reach the guard he win and the game is terminated.
-		continuer = 0
+		if TubeNotPicked == False :
+			if NeedleNotPicked == False :
+				if EtherNotPicked == False :
+					continuer = 0
 
 

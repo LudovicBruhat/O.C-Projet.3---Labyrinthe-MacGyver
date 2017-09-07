@@ -19,6 +19,8 @@ MacGyver = "images/macgyver.png"
 
 Gardien = "images/gardien.png"
 
+Carre_Noir = "images/CarreNoir.png"
+
 Level = "Level.txt"
 
 Tube = "images/Tube.png"
