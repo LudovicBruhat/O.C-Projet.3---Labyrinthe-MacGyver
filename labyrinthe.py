@@ -56,6 +56,9 @@ TubeNotPicked = True
 EtherNotPicked = True
 NeedleNotPicked = True
 
+GAME_WON = False
+GAME_LOOSE = False
+
 pygame.key.set_repeat(400, 30) #Moving MaGyver by maintening a arrow_key pressed
 
 level = Level('Level.txt')
@@ -68,8 +71,6 @@ needle = loot(needleIMG, level)
 needle.display(needleIMG, fenetre)
 ether = loot(etherIMG, level)
 ether.display(etherIMG, fenetre)
-
-syringue = 0
 
 
 #infinite loop
@@ -130,6 +131,31 @@ while continuer:
 		if TubeNotPicked == False :
 			if NeedleNotPicked == False :
 				if EtherNotPicked == False :
-					continuer = 0
+					GAME_WON = True
+		else :
+			GAME_LOOSE = True
+					
+
+	if GAME_WON == True :
+		fenetre.blit(fond, (0, 30))	# draw over everything on the screen now by re-drawing the background
+		font = pygame.font.Font(None, 25)
+		text = font.render("You won ! MacGyver is safe thanks to you !", 1, (255,255,255))
+		textrect = text.get_rect()
+		textrect.centerx, textrect.centery = cote_fenetre/2,cote_fenetre/2
+		fenetre.blit(text, textrect)
+
+		pygame.display.flip()
+
+	if GAME_LOOSE == True :
+		fenetre.blit(fond, (0, 30))	# draw over everything on the screen now by re-drawing the background
+		font = pygame.font.Font(None, 25)
+		text = font.render("Game over! You just died.", 1, (255,255,255))
+		textrect = text.get_rect()
+		textrect.centerx, textrect.centery = cote_fenetre/2,cote_fenetre/2
+		fenetre.blit(text, textrect)
+
+		pygame.display.flip()
+		"""continuer = 0"""
+
 
 
