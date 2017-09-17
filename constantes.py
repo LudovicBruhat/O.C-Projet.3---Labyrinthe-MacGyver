@@ -1,25 +1,23 @@
-#Personnalisation de la fenêtre
+# Personnalisation de la fenêtre
 
-nombre_sprite_cote = 15
-taille_sprite = 30
-cote_fenetre = nombre_sprite_cote * taille_sprite #à mettre en majuscule
+Nbr_Sprite_Side = 15
+Sprite_Size = 30
+Window_Size = Nbr_Sprite_Side * Sprite_Size  # à mettre en majuscule
 
-titre_fenetre = "Aider MacGyver à s'échapper"
+Window_Title = "Aider MacGyver à s'échapper"
 
 icone = "images/macgyver.png"
 
 
-#Listes des images du jeu
+# Listes des images du jeu
 
 background = "images/background.jpg"
 
-Wall = "images/mur.png"
+Wall = "images/wall.png"
 
 MacGyver = "images/macgyver.png"
 
-Gardien = "images/gardien.png"
-
-Carre_Noir = "images/CarreNoir.png"
+BadGuy = "images/BadGuy.png"
 
 Level = "Level.txt"
 
@@ -28,4 +26,3 @@ Tube = "images/Tube.png"
 Needle = "images/needle.png"
 
 Ether = "images/ether.png"
-

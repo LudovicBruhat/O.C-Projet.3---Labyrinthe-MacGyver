@@ -19,22 +19,22 @@ import random
 pygame.init()
 
 #Displaying the windows
-fenetre = pygame.display.set_mode((cote_fenetre, 480))
+Window = pygame.display.set_mode((Window_Size, 480))
 #Icone
 icone = pygame.image.load(MacGyver).convert_alpha()
 pygame.display.set_icon(icone)
 #Titre
-pygame.display.set_caption(titre_fenetre)
+pygame.display.set_caption(Window_Title)
 
 
 #displaying a background for the tile of the maze
-fond = pygame.image.load(background).convert()
-fenetre.blit(fond, (30,30))
+Background_Tiles = pygame.image.load(background).convert()
+Window.blit(Background_Tiles, (30,30))
 
 #displaying the character .png
-perso = pygame.image.load(MacGyver).convert_alpha() #Add the png and transparency
-"""position_perso = perso.get_rect()
-fenetre.blit(perso, position_perso)"""
+Char_img = pygame.image.load(MacGyver).convert_alpha() #Add the png and transparency
+"""position_Char = Char.get_rect()
+Window.blit(Char, position_Char)"""
 
 #displaying the walls of the maze
 wall = pygame.image.load(Wall).convert()
@@ -49,7 +49,7 @@ etherIMG = pygame.image.load(Ether).convert_alpha()
 pygame.display.flip()
 
 #Variable for the infinite loop
-continuer = 1
+continue_game = 1
 
 #Variables to check if the items have been picked or not:
 TubeNotPicked = True
@@ -63,99 +63,97 @@ pygame.key.set_repeat(400, 30) #Moving MaGyver by maintening a arrow_key pressed
 
 level = Level('Level.txt')
 level.generate()
-level.display(fenetre)
-Mac = Perso(perso, level)
+level.display(Window)
+Mac = Char(Char_img, level)
 tube = loot(tubeIMG, level)
-tube.display(tubeIMG, fenetre)
+tube.display(tubeIMG, Window)
 needle = loot(needleIMG, level)
-needle.display(needleIMG, fenetre)
+needle.display(needleIMG, Window)
 ether = loot(etherIMG, level)
-ether.display(etherIMG, fenetre)
+ether.display(etherIMG, Window)
 
 
 #infinite loop
-while continuer:
-	
-	pygame.time.Clock().tick(30) #Limiting the loop speed to 30f/s to save processor ressources
+while continue_game:
+    
+    pygame.time.Clock().tick(30) #Limiting the loop speed to 30f/s to save processor ressources
 
-	for event in pygame.event.get(): 	#Seeking every events happening while the game is running
-		if event.type == QUIT:	#If any of these events is QUIT type
-			continuer = 0	#Loop is stopped and the game windows is closed
+    for event in pygame.event.get():    #Seeking every events happening while the game is running
+        if event.type == QUIT:  #If any of these events is QUIT type
+            continue_game = 0   #Loop is stopped and the game windows is closed
 
-		#Keyboard touch used to moove MacGyver:
-		elif event.type == KEYDOWN:
-			if event.key == K_DOWN: #If ARROW DOWN pressed
-				Mac.mooving('down')
-			elif event.key == K_UP:
-				Mac.mooving('up')
-			elif event.key == K_LEFT:
-				Mac.mooving('left')
-			elif event.key == K_RIGHT:
-				Mac.mooving('right')
-
-
-	#Re-pasting after the events
-	fenetre.blit(fond, (0,30))
-	level.display(fenetre)
-	fenetre.blit(Mac.Image, (Mac.x, Mac.y))
-
-	if TubeNotPicked :
-		fenetre.blit(tube.image_objet, (tube.x, tube.y))
-	if (Mac.x, Mac.y) == (tube.x, tube.y):
-		TubeNotPicked = False
-		fenetre.blit(tube.image_objet, (0, 0))
-		
+        #Keyboard touch used to moove MacGyver:
+        elif event.type == KEYDOWN:
+            if event.key == K_DOWN: #If ARROW DOWN pressed
+                Mac.mooving('down')
+            elif event.key == K_UP:
+                Mac.mooving('up')
+            elif event.key == K_LEFT:
+                Mac.mooving('left')
+            elif event.key == K_RIGHT:
+                Mac.mooving('right')
 
 
-	if NeedleNotPicked :	
-		fenetre.blit(needle.image_objet, (needle.x, needle.y))
-	if (Mac.x, Mac.y) == (needle.x, needle.y):
-		NeedleNotPicked = False
-		fenetre.blit(needle.image_objet, (10, 0))
-		
+    #Re-pasting after the events
+    Window.blit(Background_Tiles, (0,30))
+    level.display(Window)
+    Window.blit(Mac.Image, (Mac.x, Mac.y))
+
+    if TubeNotPicked :
+        Window.blit(tube.Loot_Image, (tube.x, tube.y))
+    if (Mac.x, Mac.y) == (tube.x, tube.y):
+        TubeNotPicked = False
+        Window.blit(tube.Loot_Image, (0, 0))
+        
 
 
-	if EtherNotPicked :
-		fenetre.blit(ether.image_objet, (ether.x, ether.y))
-	if (Mac.x, Mac.y) == (ether.x, ether.y):
-		EtherNotPicked = False
-		fenetre.blit(ether.image_objet, (30, 0))
-		
-
-	#refreshing screen
-	pygame.display.flip()
+    if NeedleNotPicked :    
+        Window.blit(needle.Loot_Image, (needle.x, needle.y))
+    if (Mac.x, Mac.y) == (needle.x, needle.y):
+        NeedleNotPicked = False
+        Window.blit(needle.Loot_Image, (10, 0))
+        
 
 
-	#EndGame Victory or loose
-	if level.structure[Mac.case_y][Mac.case_x] == 'a': #If MacGyver reach the guard he win and the game is terminated.
-		if TubeNotPicked == False :
-			if NeedleNotPicked == False :
-				if EtherNotPicked == False :
-					GAME_WON = True
-		else :
-			GAME_LOOSE = True
-					
+    if EtherNotPicked :
+        Window.blit(ether.Loot_Image, (ether.x, ether.y))
+    if (Mac.x, Mac.y) == (ether.x, ether.y):
+        EtherNotPicked = False
+        Window.blit(ether.Loot_Image, (30, 0))
+        
 
-	if GAME_WON == True :
-		fenetre.blit(fond, (0, 30))	# draw over everything on the screen now by re-drawing the background
-		font = pygame.font.Font(None, 25)
-		text = font.render("You won ! MacGyver is safe thanks to you !", 1, (255,255,255))
-		textrect = text.get_rect()
-		textrect.centerx, textrect.centery = cote_fenetre/2,cote_fenetre/2
-		fenetre.blit(text, textrect)
+    #refreshing screen
+    pygame.display.flip()
 
-		pygame.display.flip()
 
-	if GAME_LOOSE == True :
-		fenetre.blit(fond, (0, 30))	# draw over everything on the screen now by re-drawing the background
-		font = pygame.font.Font(None, 25)
-		text = font.render("Game over! You just died.", 1, (255,255,255))
-		textrect = text.get_rect()
-		textrect.centerx, textrect.centery = cote_fenetre/2,cote_fenetre/2
-		fenetre.blit(text, textrect)
+    #EndGame Victory or loose
+    if level.structure[Mac.case_y][Mac.case_x] == 'a': #If MacGyver reach the guard :
+        if TubeNotPicked == False and NeedleNotPicked == False and EtherNotPicked == False :  # If every objects have been looted, he won.
+            GAME_WON = True
+        else :
+            GAME_LOOSE = True  # Else it's game over !
+                    
 
-		pygame.display.flip()
-		"""continuer = 0"""
+    if GAME_WON == True :
+        Window.blit(Background_Tiles, (0, 30)) # draw over everything on the screen now by re-drawing the background
+        font = pygame.font.Font(None, 25)
+        text = font.render("You won ! MacGyver is safe thanks to you !", 1, (255,255,255))
+        textrect = text.get_rect()
+        textrect.centerx, textrect.centery = Window_Size/2,Window_Size/2
+        Window.blit(text, textrect)
+
+        pygame.display.flip()
+
+    if GAME_LOOSE == True :
+        Window.blit(Background_Tiles, (0, 30)) # draw over everything on the screen now by re-drawing the background
+        font = pygame.font.Font(None, 25)
+        text = font.render("Game over! You just died.", 1, (255,255,255))
+        textrect = text.get_rect()
+        textrect.centerx, textrect.centery = Window_Size/2,Window_Size/2
+        Window.blit(text, textrect)
+
+        pygame.display.flip()
+        """continuer = 0"""
 
 
 
